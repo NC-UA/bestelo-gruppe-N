@@ -23,4 +23,15 @@ def test_rechnen():
     if brutto != 23.8:
             raise AssertionError("Die Bruttobetrag sollte bei 20 liegen!")
 
+    def test_menge_fehler():
+          produkt =TestProdukt()
+          position=Bestellposition(produkt,menge=1)
+
+          try:
+              position.menge=0
+          except ValueError:
+               return
+
+          assert False, "Hier sollte ein ValueError stehen"  
+
     

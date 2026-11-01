@@ -30,3 +30,9 @@ def test_gesamtsumme_netto():
 
    if ergebnis != 20.0:
       raise AssertionError("Die Bestellsumme sollte bei 20.0 liegen!")
+
+   def test_leerer_warenkorb():
+      bestellung=Bestellung(nummer=2, kunde=TestKunde())
+      ergebnis=Bestellung.gesamtSumme_netto
+      if Ergebnis != 0:
+         raise AssertionError("Leerer Warenkorb sollte bei 0 stehen")
