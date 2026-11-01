@@ -99,3 +99,143 @@ class Privatkunde(Kunde):
 
     def __repr__(self):
         return f"Privatkunde ({self.kundennummer!r}, {self.name!r})"
+
+class Geschaeftskunde(Kunde):
+    """ stellt einen Geschäftskunde mit Firmenangaben dar """
+    def __init__(self,kundennummer: int, name: str, email: str, firmenname: str, ust_id: str, zahlungsziel_tage: int = 14 )-> None:
+        """ Initialisiert einen geschäftskunden mit seinen Angaben """
+        super().__init__(kundennummer, name, email)
+        self.firmenname = firmenname
+        self.ust_id = ust_id
+        self.zahlungsziel_tage = zahlungsziel_tage
+
+
+    @property
+    def firmenname(self)-> str: 
+        """gibt den gespeicherten Firmennamen zurück"""
+        return self._firmenname
+
+    @firmenname.setter
+    def firmenname(self, firmenname: str)-> None:
+        """ Prüft und speichert den Firmennamen """
+        if not firmenname.strip():
+            raise ValueError("Eingabe darf nicht leer sein") 
+        
+        else:
+    
+            self._firmenname = firmenname.strip()
+
+    @property
+    def ust_id(self)-> str: 
+        """gibt die gespeicherte Umsatzsteuer ID zurück"""
+
+        return self._ust_id
+
+    @ust_id.setter
+    def ust_id(self, ust_id: str)-> None:
+        """prüft und speichert eine gültige Umsatzsteuer ID"""
+
+
+        ust_id = ust_id.replace(" ","") # Entfernung der Leerzeichen
+        ust_id = ust_id.upper() # Alle Buchstaben werden Groß geschrieben
+
+        if len(ust_id) != 11: # Prüft ob die länge falsch ist 
+            raise ValueError ("Falsche Länge")
+        
+        if not ust_id.startswith("DE"): #Prüft ob die Umsatzsteuer ID mit DE beginnt
+            raise ValueError ("Falscher Anfang")
+
+        if not ust_id [2:].isdigit(): #Nimmt alles ab dem 3. Zeichen 
+            raise ValueError("Zahlen fehlen")
+
+        self._ust_id = ust_id
+
+    @property
+    def zahlungsziel_tage(self)-> int:
+        """Gibt das Zahlugnsziel in Tagen zurück"""
+        return self._zahlungsziel_tage
+
+    @zahlungsziel_tage.setter
+    def zahlungsziel_tage(self, zahlungsziel_tage: int)-> None:
+        """Prüft und speichert ein Zahlungsziel zwischen 0. und 60 Tagen"""
+
+        if zahlungsziel_tage < 0 or zahlungsziel_tage > 60 : # Prüft ob die zahl Kleiner als 0 und größer als 60 ist
+            raise ValueError("Eingabe ungültig") # Wenn kleiner als 0 und größer als 60 ist die Eingabe ungültig 
+
+        else:
+
+            self._zahlungsziel_tage = zahlungsziel_tage
+
+
+    def begruessung(self)->str:
+        """gibt eine Begrüßung für den Geschäftskunden zurück"""
+        return f"Sehr geehrte Damen und Herren der {self.firmenname},"
+
+    def rabattsatz(self)-> float:
+        """Gibt den festen Rabatt von 3% zurück """
+        return 0.03
+
+    def __str__(self) ->str:
+        """Gibt die Firma und den Ansprechpartner als Text zurück"""
+        return f"Kunde {self.kundennummer}: {self.firmenname} (Ansprechpartner: {self.name})"
+
+
+class Verein(Kunde):
+    """ Stellt einen Verein als Kunde dar"""
+    def __init__(self, kundennummer: int, name: str, email: str, registernummer: str, gemeinnuetzig: bool = True)-> None:
+        """Initialisiert einen Verein mit seinen Angaben"""
+
+        super().__init__(kundennummer, name, email)
+
+        self.registernummer = registernummer
+        self.gemeinnuetzig = gemeinnuetzig 
+
+
+    @property 
+    def registernummer(self)-> str:
+        """gibt die gespeicherte Registernummer zurück"""
+        return self._registernummer
+
+    @registernummer.setter
+    def registernummer(self, registernummer: str)-> None: 
+        """Prüft und speichert eine gültige Registernummer"""
+
+        if not registernummer.startswith("VR "): #Prüft ob die Registernummer mit VR beginnt
+            raise ValueError ("Falscher Anfang")
+
+        if not registernummer[3:].isdigit(): #Nimmt alles ab dem 4. Zeichen 
+            raise ValueError("Zahlen fehlen")
+
+        self._registernummer = registernummer 
+
+    def begruessung(self)->str:
+            """gibt eine Begrüßung an den Vorstand zurück"""
+            return f"An den Vorstand des Vereins {self.name}"
+        
+    def rabattsatz(self)-> float:
+        """Gibt einen Rabatt zurück"""
+        
+        if self.gemeinnuetzig: # wenn es ein gemeinnütziger Verein ist 
+                 
+
+         return 0.05 # wird 5 % Rabbatt gewährt 
+
+        else: # Wenn es kein gemeinnütziger Verein ist 
+                
+
+            return 0.02 # wird 2 % Rabatt gewährt
+                     
+
+
+    
+
+
+
+
+
+    
+    
+
+
+
+
