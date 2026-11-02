@@ -1,14 +1,8 @@
 
-from bestelo.kunden import Kunde
+from bestelo.kunden import Privatkunde
 from bestelo.bestellposition import Bestellposition
 from bestelo.bestellungen import Bestellung
-
-class TestKunde:
-    pass
-
-class TestProdukt:
-    nettopreis=10.0
-    mwst_satz=0.10
+from bestelo.bestellungen import Produkt
 
 def test_bestellnummer():
  bestellungen=Bestellung(nummer=2, kunde=TestKunde())
@@ -34,5 +28,5 @@ def test_gesamtsumme_netto():
    def test_leerer_warenkorb():
       bestellung=Bestellung(nummer=2, kunde=TestKunde())
       ergebnis=Bestellung.gesamtSumme_netto
-      if Ergebnis != 0:
+      if ergebnis != 0:
          raise AssertionError("Leerer Warenkorb sollte bei 0 stehen")

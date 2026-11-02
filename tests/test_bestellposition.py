@@ -10,9 +10,9 @@ def test_rechnen():
     produkt=TestProdukt()
     position=Bestellposition(produkt,menge=2)
 
-    netto=position.netto()
-    mwst=position.mwst()
-    brutto=position.brutto()
+    netto=position.netto
+    mwst=position.mwst
+    brutto=position.brutto
 
     if netto != 20.0:
         raise AssertionError("Die Nettobetrag sollte bei 20 liegen!")

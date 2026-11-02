@@ -20,17 +20,19 @@ class Bestellposition:
         raise ValueError("Menge muss 1 sein")
      self._menge = wert
 
+    @property
     def netto(self) -> float:
      betrag=self._produkt.nettopreis*self.menge
      return round(betrag,2)
-
+    
+    @property
     def mwst(self) -> float:
-     betrag=self.netto()*self._produkt.mwst_satz
+     betrag=self.netto*self._produkt.mwst_satz
      return round(betrag,2)
 
-
+    @property
     def brutto(self) -> float:
-     betrag=self.netto()+self.mwst()
+     betrag=self.netto+self.mwst
      return round(betrag,2)
 
     def __str__ (self) -> str:
