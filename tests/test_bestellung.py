@@ -3,6 +3,8 @@ from bestelo.bestellungen import Bestellposition, Bestellung
 
 class TestKunde:
      name="Lucca Kloiber"
+     def rabattsatz(self):
+          return 0.0
 
 
 class TestProdukt:
@@ -31,7 +33,7 @@ def test_gesamtsumme_netto():
 
 def test_leerer_warenkorb():
       bestellung=Bestellung(kunde=TestKunde())
-      ergebnis=Bestellung.netto_summe
+      ergebnis=bestellung.netto_summe
       if ergebnis != 0:
          raise AssertionError("Leerer Warenkorb sollte bei 0 stehen")
       

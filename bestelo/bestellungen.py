@@ -103,7 +103,7 @@ class Bestellung:
 
       def abschliessen (self) -> None:
           if len (self.position)==0:
-              raise ValueError("Bestellung sollte Leer sein")
+              raise ValueError("Bestellung sollte nicht Leer sein")
           self.status='abgeschlossen'
       
       def __len__(self) -> int:
