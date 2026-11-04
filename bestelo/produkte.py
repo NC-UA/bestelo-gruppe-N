@@ -8,7 +8,7 @@ class Produkt:
 
     def __init__(self, artikelnummer: str, bezeichnung: str, nettopreis: float,
                  kategorie: str = "Sonstiges"):
-        """Legt ein Produkt an und prüft, ob die artikelnummer korrekt formatiert ist. """
+        """Legt ein Produkt an und prüft, ob die artikelnummer korrekt formatiert ist."""
         if not(len(artikelnummer) == 6 and artikelnummer.startswith("P-")) and artikelnummer[2:].isdigit():
             raise ValueError("Muss dem Format \"P-1001\" entsprechen")
         self._artikelnummer = artikelnummer
