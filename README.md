@@ -1,15 +1,22 @@
 # Projekt-Bestelo
-Aufgabe 1: Nazar (NC-UA)
 
-Aufgabe 2: Karen
+** Gruppe 1 **
 
-Aufgabe 3: Elliot
+## Projektbeschreibung
 
-Aufgabe 4: Lucca (Glotz)
+Bestelo ist ein Shopsystem, das mit Python entwickelt wird.
 
-Aufgabe 5: Offen
+Das Programm verwaltet verschiedene Kundentypen, Produkte und Bestellungen. Dabei werden je nach Kundentyp unterschiedliche Rabatte sowie die Mehrwertsteuer berücksichtigt. Außerdem können Produkte aus einer CSV-Datei eingelesen werden.
 
-Wir müssen zwischen round und decimal entscheiden, decimal ist laut Foliensatz aber für Phase 2 bestimmt (Für das Runden der Zahlen da wir immer auf die 2 runden sollen).
+Ziel ist es, die Programmierung in Python praktisch anzuwenden und die Funktionen mithilfe von pytest zu überprüfen.
+
+## Team
+| Name |GitHub-Name | Aufgabe | Verantwortung |
+|---|---|---|---|
+| Nazar Chaika | NC-UA| Person 1 | Kunde und Privatkunde | Teamleitung | 
+| Karen Johanna Cosic | karco96 |Person 2 | Geschaeftskunde, Verein, UML-Diagramm und README|
+| Elliot Keil | Elliot-Joshua | Person 3 | Produkt und CSV-Datei |
+| Lucca Kloiber | Kloiber | Person 4 | Bestellposition, Bestellung und Integrationstests |
 
 ## UML-Klassendiagramm
 
@@ -112,5 +119,27 @@ classDiagram
     Bestellung "0..*" -->"1" Kunde : kunde
     Bestellung "1" *-- "0..*" Bestellposition : positionen
     Bestellposition --> Produkt : produkt 
+
+## So wird das Projekt gestartet 
+
+Für die Ausführung des Projekts wird eine Python-Installation benötigt. Zur Durchführung der automatisierten Tests wird zusätzlich pytest verwendet.
+
+Die folgenden Befehle werden im Terminal im Hauptverzeichnis des Projekts ausgeführt.
+
+Anwendung starten:
+
+python -m bestelo
+
+Tests ausführen:
+
+python -m pytest
+
+## Ideen für Phase 2
+
+Spendenfunktion: Kunden könnten beim Abschluss einer Bestellung freiwillig einen zusätzlichen Betrag an einen gemeinnützigen Verein spenden.
+Bestellhistorie: Kunden könnten ihre bisherigen Bestellungen einsehen und Produkte erneut bestellen.
+Gemeinsame Bestellungen: Mehrere Vereinsmitglieder könnten Produkte zusammen bestellen, sodass größere Sammelbestellungen einfacher organisiert werden können.
+Spezialisierung auf einen Vereinsshop: Das Shopsystem könnte für Sport- oder Kulturvereine erweitert werden, beispielsweise für den Verkauf von Vereinskleidung und Zubehör
+
 
 ```
