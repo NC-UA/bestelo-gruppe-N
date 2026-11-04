@@ -120,6 +120,8 @@ classDiagram
     Bestellung "1" *-- "0..*" Bestellposition : positionen
     Bestellposition --> Produkt : produkt 
 
+```
+
 ## So wird das Projekt gestartet 
 
 Für die Ausführung des Projekts wird eine Python-Installation benötigt. Zur Durchführung der automatisierten Tests wird zusätzlich pytest verwendet.
@@ -142,4 +144,3 @@ Gemeinsame Bestellungen: Mehrere Vereinsmitglieder könnten Produkte zusammen be
 Spezialisierung auf einen Vereinsshop: Das Shopsystem könnte für Sport- oder Kulturvereine erweitert werden, beispielsweise für den Verkauf von Vereinskleidung und Zubehör
 
 
-```
