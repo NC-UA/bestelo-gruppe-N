@@ -41,6 +41,7 @@ class Kunde:
         return self._email
 
     """prüft, ob angegebene E-Mail den Anforderungen von ist_gueltige_email entspricht"""
+    @email.setter
     def email(self, adresse: str) -> None:
         if not self.ist_gueltige_email(adresse):
             raise ValueError("Fehler: Diese E-Mail Adresse ist ungültig")
@@ -176,6 +177,7 @@ class Geschaeftskunde(Kunde):
     def begruessung(self)->str:
         """gibt eine Begrüßung für den Geschäftskunden zurück"""
         return f"Sehr geehrte Damen und Herren der {self.firmenname},"
+        
 
     def rabattsatz(self)-> float:
         """Gibt den festen Rabatt von 3% zurück """

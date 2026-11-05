@@ -1,4 +1,3 @@
-
 from bestelo.produkte import Produkt
 from bestelo.kunden import Kunde
 
@@ -46,6 +45,7 @@ class Bestellposition:
 
     def __str__ (self) -> str:
      """Hier wird dieser kommende Text als print ausgegeben"""
+     
      return(
         f"{self.menge}x {self._produkt.bezeichnung} "
         f"für/je {self._produkt.nettopreis:.2f}€"

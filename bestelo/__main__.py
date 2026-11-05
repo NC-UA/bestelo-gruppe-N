@@ -1,39 +1,20 @@
-"""from bestelo.kunden import Kunde, Privatkunde
+from pathlib import Path
 
-anna = Kunde(1001, "  Anna Müller ", "anna@example.com")
-print(anna)
-print(repr(anna))
-print(anna.begruessung(), anna.rabattsatz())
-print(anna == Kunde(1001, "A. Müller", "a.mueller@example.com"))
-print(Kunde.ist_gueltige_email("anna-at-example.com"))
-
-try:
-    anna.name = " "
-except ValueError as fehler:
-    print("Fehler:", fehler)
+from bestelo.bestellungen import Bestellung
+from bestelo.kunden import Geschaeftskunde, Kunde, Privatkunde, Verein 
+from bestelo.produkte import Produkt
 
 
-anna = Privatkunde(1001, "Anna Müller", "anna@example.com", 1995, stammkunde=True)
-print(anna)
-print(repr(anna))
-print(anna.alter(2026), anna.rabattsatz())
-print(isinstance(anna, Kunde))
-
-
-diese __main__.py Datei soll man im VS-Code im Termin mit folgendem Befehl ausführen:
-python -m bestelo (so steht auch im Skript auf Seite 13, wenn ich das richtig verstanden habe).
+"""diese __main__.py Datei soll man im VS-Code im Termin mit folgendem Befehl ausführen:
+python -m bestelo (so steht auch im Skript auf Seite 13).
 Wenn man __main__.py über "Run Python File Button startet, dann kommt es zu folgen Fehlermeldung: 
 'ModuleNotFoundError: No module named 'bestelo' """
-
-from bestelo.produkte import Produkt
-from bestelo.kunden import Verein,Privatkunde,Geschaeftskunde
-from bestelo.bestellungen import Bestellung
-from pathlib import Path
 
 CSV_PFAD=Path(__file__).parent/"daten"/"produkte.csv"
 
 def beleg_drucken(bestellung:Bestellung)->None:
     """Hier wird der vorgegebene Kassenzettel angegeben"""
+    print("=" * 50)
     print(f"Bestellung{bestellung.bestellnummer} ({bestellung.status})")
     print(bestellung.kunde.begruessung())
     
@@ -42,6 +23,7 @@ def beleg_drucken(bestellung:Bestellung)->None:
 
     rabatt_prozent=int(bestellung.kunde.rabattsatz()*100)
     
+    print("-" * 50)
     print(f"Netto: {bestellung.netto_summe:.2f}€")
     print(f"Rabatt{rabatt_prozent}%: {-bestellung.rabatt_betrag:.2f}€")
     print(f"MwSt: {bestellung.mwst_betrag:.2f}€")
@@ -53,7 +35,7 @@ def main()-> None:
     produkte =Produkt.aus_csv_datei(CSV_PFAD)
     produkte.sort()
     for p in produkte:
-        print(p)
+        print(f"\t{p}")
     print()
     """Hier werden die Kunden angelegt und aufgelistet"""
     anna=Privatkunde(1001, "Anna Müller", "anna@example.com", 1995, True)
@@ -62,7 +44,7 @@ def main()-> None:
 
     for kunde in [anna, ben, sv]:
         rabatt_prozent=int(kunde.rabattsatz()*100)
-        print(f"{kunde}{rabatt_prozent}Rabatt")
+        print(f"{kunde} - {rabatt_prozent}% Rabatt")
     print()
     """Hier sind hier noch leer aber zugeordnet"""
     bestellung1=Bestellung(ben)
