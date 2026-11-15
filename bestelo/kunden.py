@@ -226,7 +226,7 @@ class Verein(Kunde):
         if self.gemeinnuetzig: # wenn es ein gemeinnütziger Verein ist 
                  
 
-         return 0.05 # wird 5 % Rabbatt gewährt 
+            return 0.05 # wird 5 % Rabbatt gewährt 
 
         else: # Wenn es kein gemeinnütziger Verein ist 
                 
