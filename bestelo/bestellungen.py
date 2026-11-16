@@ -1,3 +1,4 @@
+from bestelo.rabatte import KundenRabatt # neu hinzugefügt
 from bestelo.produkte import Produkt
 from bestelo.kunden import Kunde
 
@@ -20,14 +21,14 @@ class Bestellposition:
 
     @menge.setter 
     def menge(self, wert:int) -> None:
-     """Hier wmuss die Menge min. 1 sein"""
+     """Hier muss die Menge min. 1 sein"""
      if not wert >= 1:
         raise ValueError("Menge muss 1 sein")
      self._menge = wert
 
     @property
     def netto(self) -> float:
-     """Hier wird eder Nettopreis der gesamten Bestellung (Position) berechnet"""
+     """Hier wird der Nettopreis der gesamten Bestellung (Position) berechnet"""
      betrag=self._produkt.nettopreis*self.menge
      return round(betrag,2)
     
@@ -55,13 +56,18 @@ class Bestellposition:
 class Bestellung:
       """Hier wird die komplette Bestellung abgewickelt"""
       _nr=1
-      def __init__(self, kunde: Kunde) ->None:
+      def __init__(self, kunde: Kunde, rabattregel=None) ->None: #rabattregel=None hinzugefügt
             """Hier wird eine Bestellung angelegt mit einer fortlaufenden Nummer"""
+            if rabattregel is None:         #if-Block hinzugefügt
+                rabattregel = KundenRabatt()
+            self._rabattregel = rabattregel
+
             self.nummer= Bestellung._nr
             Bestellung._nr+=1
             self.kunde= kunde
             self.status= 'offen'
             self.position= []
+            
 
       def hinzufuegen(self, produkt:Produkt, menge: int=1) ->None:
             if self.status !='offen': raise ValueError("Nicht offen")
@@ -75,7 +81,7 @@ class Bestellung:
       @property
       def netto_summe(self) -> float:
             summe=0.0
-            """Hier wird eidie Nettosumme aller im Warenkorb liegende Produkte (Postitionen) berechnet"""
+            """Hier wird die Nettosumme aller im Warenkorb liegende Produkte (Postitionen) berechnet"""
             for position in self.position:
                 summe+=position.netto
     
@@ -86,7 +92,7 @@ class Bestellung:
             """Hier wird die Bruttosumme berechnet (Rabatt(Netto)+Rabatt(MWST))"""
             return round(self.netto_nach_rabatt+self.mwst_betrag,2)
    
-      @property
+      @property #geändert
       def mwst_betrag(self) -> float:
             """Hier wird die MWST berechnet plus der Rabatt wird beachtet"""
             summe=0.0
@@ -94,17 +100,31 @@ class Bestellung:
             for position in self.position:
                 summe+=position.mwst
     
-            return round(summe*(1-self.kunde.rabattsatz()),2)
+            #return round(summe*(1-self.kunde.rabattsatz()),2) Code aus Phase 1
+            return round(summe* (1-self.rabattsatz), 2) #neu hinzugefügt
+
+      @property #Property ohne Setter für Rabattregel hinzugefügt
+      def rabattregel(self) -> float:
+          return self._rabattregel
+
+      @property #neu hinzugefügt
+      def rabattsatz(self) -> float:
+          return self._rabattregel.rabattsatz(self)
     
-      @property
+      @property #geändert
       def rabatt_betrag(self) -> float:
         """Hier wird ein Rabatt aufgrund des Kundenrabattes berechnet"""
-        return round(self.netto_summe*self.kunde.rabattsatz(),2)
+        #return round(self.netto_summe*self.kunde.rabattsatz(),2) Code aus Phase 1
+        return round(self._rabattregel.rabatt_betrag(self), 2) #neu hinzugefügt 
     
       @property
       def netto_nach_rabatt(self) -> float:
         """Hier wird die Nettosumme mit dem Rabatt wiedergegeben"""
         return round(self.netto_summe-self.rabatt_betrag,2)
+
+      @property # neu hinzugefügt
+      def stueckzahl(self) -> int:
+          return sum(position.menge for position in self.position) #addiert alle Mengen
 
       @property
       def bestellnummer(self) -> str:
