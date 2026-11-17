@@ -22,6 +22,7 @@ klein.hinzufuegen(wasser, 2)
 print(klein.rabattsatz)          # nur 2 Stück → Kundenrabatt 2 %
 klein.hinzufuegen(wasser, 10)
 print(klein.rabattsatz)          # 12 Stück → Mengenrabatt 4 %
+print()         
 
 """Hier endet der Beispielcode aus Teil 2 für Person 1"""
 

@@ -24,7 +24,9 @@ def test_zahlungsziel()-> None:
 def test_geschaeftskunde() -> None:
    ben = Geschaeftskunde(1002,"Ben Schmidt", "ben@schmidt-it.de", "Schmidt IT GmbH", "DE123456789") 
 
-   assert ben.begruessung() =="Sehr geehrte Damen und Herren der Schmidt IT GmbH,"
+   assert ben.begruessung() == (
+       "Sehr geehrte Damen und Herren der Schmidt IT GmbH,\n"
+       + "-" * 50)
    assert str(ben) == "Kunde 1002: Schmidt IT GmbH (Ansprechpartner: Ben Schmidt)"
    assert ben.rabattsatz() == 0.03
 

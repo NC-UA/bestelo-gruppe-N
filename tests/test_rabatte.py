@@ -25,3 +25,25 @@ def test_kundenrabatt() -> None:
     kunde = Kunde(1001, "  Anna Müller ", "anna@example.com")
     bestellung = Bestellung(kunde)
     assert isinstance(bestellung.rabattregel, KundenRabatt)
+
+"""Test 4 prüft, ob man kein Rabatt (0.0) bekommt, wenn man weniger als 10 Stück bestellt"""
+def test_mengenrabatt_bis_10_stueck() -> None:
+    kunde = Kunde(1001, "Anna Müller", "anna@example.com")
+    produkt = Produkt("P-1002", "Mineralwasser 12 × 1 l", 7.50, "Getränke")
+
+    menge = Mengenrabatt(ab_stueck=10, satz=0.04)
+    bestellung = Bestellung(kunde, menge)
+    bestellung.hinzufuegen(produkt, 9)
+
+    assert bestellung.rabattsatz == 0.0
+
+"""Test 5 prüft, ob man einen Rabatt von 4 % (also 0.04) bekommt, wenn man ab 10 Stück bestellt"""
+def test_mengenrabatt_ab_10_stueck() -> None:
+    kunde = Kunde(1001, "Anna Müller", "anna@example.com")
+    produkt = Produkt("P-1002", "Mineralwasser 12 × 1 l", 7.50, "Getränke")
+
+    menge = Mengenrabatt(ab_stueck=10, satz=0.04)
+    bestellung = Bestellung(kunde, menge)
+    bestellung.hinzufuegen(produkt, 12)
+
+    assert bestellung.rabattsatz == 0.04

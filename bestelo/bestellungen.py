@@ -46,11 +46,11 @@ class Bestellposition:
 
     def __str__ (self) -> str:
      """Hier wird dieser kommende Text als print ausgegeben"""
-     
+
      return(
         f"{self.menge}x {self._produkt.bezeichnung} "
-        f"für/je {self._produkt.nettopreis:.2f}€"
-        f"= {self.netto:.2f}€"
+        f"für/je {self._produkt.nettopreis:.2f} €"
+        f" = {self.netto:.2f} €"
     )
 
 class Bestellung:
