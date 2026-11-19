@@ -3,6 +3,28 @@ from pathlib import Path
 from bestelo.bestellungen import Bestellung
 from bestelo.kunden import Geschaeftskunde, Kunde, Privatkunde, Verein 
 from bestelo.produkte import Produkt
+from bestelo.rabatte import BesterRabatt, KundenRabatt, Mengenrabatt #neu hinzugefügt
+
+
+"""Ab hier beginnt Beispielcode, den Person 1 im Teil 2 eingeben kann, um zu prüfen, ob der Code funktioniert"""
+wasser = Produkt("P-1002", "Mineralwasser 12 × 1 l", 7.50, "Getränke")
+anna = Privatkunde(1001, "Anna Müller", "anna@example.com", 1995, stammkunde=True)
+
+menge = Mengenrabatt(ab_stueck=10, satz=0.04)
+party = Bestellung(anna, menge)
+party.hinzufuegen(wasser, 12)
+print(menge.beschreibung(), "→", party.rabattsatz)
+print(party.netto_summe, party.rabatt_betrag, party.mwst_betrag, party.brutto_summe)
+
+beste = BesterRabatt([KundenRabatt(), menge])
+klein = Bestellung(anna, beste)
+klein.hinzufuegen(wasser, 2)
+print(klein.rabattsatz)          # nur 2 Stück → Kundenrabatt 2 %
+klein.hinzufuegen(wasser, 10)
+print(klein.rabattsatz)          # 12 Stück → Mengenrabatt 4 %
+print()         
+
+"""Hier endet der Beispielcode aus Teil 2 für Person 1"""
 
 
 """diese __main__.py Datei soll man im VS-Code im Termin mit folgendem Befehl ausführen:

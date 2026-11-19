@@ -176,7 +176,8 @@ class Geschaeftskunde(Kunde):
 
     def begruessung(self)->str:
         """gibt eine Begrüßung für den Geschäftskunden zurück"""
-        return f"Sehr geehrte Damen und Herren der {self.firmenname},"
+        return(f"Sehr geehrte Damen und Herren der {self.firmenname},\n"
+               + "-" * 50)
         
 
     def rabattsatz(self)-> float:

@@ -1,3 +1,4 @@
+"""Neue rabatte.py-Datei für die Phase 2 des Projektes"""
 from abc import ABC, abstractmethod
 
 class Rabattregel(ABC):
