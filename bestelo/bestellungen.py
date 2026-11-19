@@ -1,6 +1,8 @@
 from bestelo.rabatte import KundenRabatt # neu hinzugefügt
 from bestelo.produkte import Produkt
 from bestelo.kunden import Kunde
+from bestelo.fehler import BestellstatusError
+from bestelo.zahlung import Zahlungsmittel
 
 class Bestellposition:
     """Hier werden die Position der Bestellung hergestellt"""
@@ -143,6 +145,21 @@ class Bestellung:
           if len (self.position)==0:
               raise ValueError("Bestellung sollte nicht Leer sein")
           self.status='abgeschlossen'
+
+      def bezahlen(self, zahlungsmittel: Zahlungsmittel) -> str:
+          """Bezahlt eine abgeschlossene Bestellung."""
+
+          if self.status != "abgeschlossen":
+              raise BestellstatusError(
+                  self.bestellnummer,
+                  "Nur abgeschlossene Bestellungen können bezahlt werden"
+              )
+          beleg = zahlungsmittel.bezahlen(self.brutto_summe)
+          self.status = "bezahlt"
+          return beleg 
+      
+        
+    
       
       def __len__(self) -> int:
           anzahl=0
