@@ -105,3 +105,7 @@ class Produkt:
                     continue
                 liste_produkte.append(cls.aus_csv_zeile(produkt))
             return liste_produkte
+
+    def __hash__(self) -> int:
+        """Hash aus der Artikelnummer, um es mit __eq__ gleich zu machen."""
+        return hash(self.artikelnummer)
