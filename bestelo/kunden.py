@@ -68,6 +68,15 @@ class Kunde:
         else:
             return self.kundennummer == other.kundennummer
 
+    def als_dict(self)-> dict:
+        """Gibt für JASON alle Daten der Klasse Kunden zurück"""
+        daten ={}
+        klassenname=type(self).__name__
+        daten["typ"]=klassenname
+        daten["kundennummer"]=self.kundennummer
+        daten["name"]=self.name
+        daten["email"]=self.email
+        return daten
  
 class Privatkunde(Kunde):
     """erstellt Unterklasse Privatkunde, die von der Basisklasse Kunde einige Eigenschaften vererbt"""
@@ -106,6 +115,13 @@ class Privatkunde(Kunde):
 
     def __repr__(self):
         return f"Privatkunde ({self.kundennummer!r}, {self.name!r})"
+
+    def als_dict(self)-> dict:
+            """Gibt für JASON alle Daten der Klasse Privatkunden zurück(erweitert damit den Kunden)"""
+            daten =super().als_dict()
+            daten["stammkunde"]=self.stammkunde
+            daten["geburtsjahr"]=self.geburtsjahr
+            return daten
 
 class Geschaeftskunde(Kunde):
     """ stellt einen Geschäftskunde mit Firmenangaben dar """
@@ -188,6 +204,17 @@ class Geschaeftskunde(Kunde):
         """Gibt die Firma und den Ansprechpartner als Text zurück"""
         return f"Kunde {self.kundennummer}: {self.firmenname} (Ansprechpartner: {self.name})"
 
+    def als_dict(self)-> dict:
+                """Gibt für JASON alle Daten der Klasse Geschäftskunde zurück(erweitert damit den Kunden)"""
+                daten =super().als_dict()
+                daten["firmenname"]=self.firmenname
+                daten["zahlungsziel_tage"]=self.zahlungsziel_tage
+                daten["ust_id"]=self.ust_id
+                return daten
+    def __str__(self):
+        """Hier wird die Firma und der Ansprechpartner angezeigt"""
+        return f"Kunde {self.kundennummer}: {self.firmenname} (Ansprechpartner: {self.name})"
+
 
 class Verein(Kunde):
     """ Stellt einen Verein als Kunde dar"""
@@ -234,7 +261,12 @@ class Verein(Kunde):
 
             return 0.02 # wird 2 % Rabatt gewährt
                      
-
+    def als_dict(self)-> dict:
+            """Gibt für JASON alle Daten der Klasse Verein zurück"""
+            daten =super().als_dict()
+            daten["registernummer"]=self.registernummer
+            daten["gemeinnuetzig"]=self.gemeinnuetzig
+            return daten
 
     
 

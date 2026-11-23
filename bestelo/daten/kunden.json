@@ -1,0 +1,31 @@
+
+[
+    {
+        "typ": "Privatkunde",
+        "kundennummer": 1001,
+        "name": "Anna Mueller",
+        "email": "anna@example.com",
+        "geburtsjahr": 1995,
+        "stammkunde": true
+
+    },
+    {
+        "typ": "Geschaeftskunde",
+        "kundennummer": 1002,
+        "name": "Ben Schmidt",
+        "email": "ben@schmidt-it.de",
+        "firmenname": "Schmidt IT GmbH",
+        "ust_id": "DE123456789",
+        "zahlungsziel_tage": 30
+
+    },
+    {
+        "typ": "Verein",
+        "kundennummer": 1003,
+        "name": "SV Musterstadt",
+        "email": "info@sv-musterstadt.de",
+        "registernummer": "VR 1234",
+        "gemeinnuetzig": true
+
+    }
+]
