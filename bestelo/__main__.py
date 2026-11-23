@@ -7,6 +7,7 @@ from bestelo.rabatte import BesterRabatt, KundenRabatt, Mengenrabatt #neu hinzug
 from bestelo.repository import KundenRepository, Sortiment
 from bestelo.zahlung import Kreditkarte, Rechnung
 from bestelo.fehler import BesteloError
+from bestelo.warenkorb import Warenkorb
 
 
 """diese __main__.py Datei soll man im VS-Code im Termin mit folgendem Befehl ausführen:
@@ -21,8 +22,10 @@ def beleg_drucken(bestellung:Bestellung)->None:
     rabatt_prozent=round(bestellung.rabattsatz*100)
     print("=" * 50)
     print(f"Bestellung{bestellung.bestellnummer} ({bestellung.status})")
-    print(bestellung.kunde.begruessung())
-    print("=" * 50)
+    begruessung=bestellung.kunde.begruessung()
+    print(begruessung)
+    if not begruessung.endswith("-" * 50):
+        print("-" * 50)
     
     for position in bestellung.position:
         produkt=position.produkt
@@ -78,6 +81,38 @@ def main()-> None:
     rechnung=Rechnung(ben.zahlungsziel_tage)
     rechnungsbeleg=bestellung1.bezahlen(rechnung)
     print(rechnungsbeleg)
+
+    """Wir legen 12 mal Wasser in den Einkauskorb"""
+    mineralwasser=sortiment.holen("P-1002")
+    warenkorb=Warenkorb()
+    warenkorb.hinzufuegen(mineralwasser, 12)
+
+    """Alles was im Einkausfkorb liegt wird hier angezeigt"""
+    anzahl_produkte=len(warenkorb)
+    anzahl_produkte=warenkorb.stueckzahl
+    nettosumme=warenkorb.netto
+    print(f"Warenkorb: {anzahl_produkte} Produkt(e), {anzahl_produkte} Stück, {nettosumme:.2f} € netto")
+
+    """Hier wird für Anna der Rabattsatz festgelegt"""
+    kundenRabatt=KundenRabatt()
+    mengenrabatt=Mengenrabatt(ab_stueck=10, satz=0.04)
+    rabattregeln=[kundenRabatt, mengenrabatt]
+    bester_rabatt=BesterRabatt(rabattregeln)
+
+    """Jetzt aus allem im Einkaufskorb einen Bestellung bauen"""
+    annas_bestellung=warenkorb.bestellen(anna, bester_rabatt)
+    annas_bestellung.abschliessen()
+    beleg_drucken(annas_bestellung)
+
+    """Wenn Anna mit der Karte zahlen sollte(macht Sie)"""
+    kreditkarte=Kreditkarte(anna.name, "4111 1111 1111 4242")
+    zahlungsbeleg=annas_bestellung.bezahlen(kreditkarte)
+    print(zahlungsbeleg)
+
+    try:
+        annas_bestellung.hinzufuegen(mineralwasser, 1)
+    except BesteloError as fehler:
+        print("Fehler: ",fehler)
 
     """Hier laden wir alle 3 möglichen Kunden in eine temporäre Datei"""
     with tempfile.TemporaryDirectory() as ordner:
