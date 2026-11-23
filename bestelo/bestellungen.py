@@ -72,7 +72,7 @@ class Bestellung:
             
 
       def hinzufuegen(self, produkt:Produkt, menge: int=1) ->None:
-            if self.status !='offen': raise ValueError("Nicht offen")
+            if self.status !='offen': raise BestellstatusError(self.bestellnummer, "Bestellung ist nicht mehr offen")
             for position in self.position:
                 """Hier wird die Menge erhöht oder ein Produkt zur Bestellung hinzugefügt"""
                 if position.produkt==produkt:
@@ -143,7 +143,7 @@ class Bestellung:
       def abschliessen (self) -> None:
           """Hier wird die Bestellung auf abgeschlossen gesetzt"""
           if len (self.position)==0:
-              raise ValueError("Bestellung sollte nicht Leer sein")
+              raise BestellstatusError(self.bestellnummer, "Bestellung darf nicht leer sein")
           self.status='abgeschlossen'
 
       def bezahlen(self, zahlungsmittel: Zahlungsmittel) -> str:
