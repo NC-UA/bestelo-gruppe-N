@@ -17,36 +17,44 @@ Wenn man __main__.py über "Run Python File Button startet, dann kommt es zu fol
 
 CSV_PFAD=Path(__file__).parent/"daten"/"produkte.csv"
 
-def beleg_drucken(bestellung:Bestellung)->None:
+def beleg_drucken(zeilen: list[str], bestellung:Bestellung)->None:
     """Hier wird der vorgegebene Kassenzettel angegeben"""
     rabatt_prozent=round(bestellung.rabattsatz*100)
-    print("=" * 50)
-    print(f"Bestellung{bestellung.bestellnummer} ({bestellung.status})")
+
+    zeilen.append("=" * 50)
+    zeilen.append(f"Bestellung {bestellung.bestellnummer} ({bestellung.status})")
+
     begruessung=bestellung.kunde.begruessung()
-    print(begruessung)
-    if not begruessung.endswith("-" * 50):
-        print("-" * 50)
+    begruessungzeilen=begruessung.split("\n")
+
+    zeilen.append(begruessungzeilen[0])
+    zeilen.append("-" * 50)
     
     for position in bestellung.position:
         produkt=position.produkt
-        print(position)
+        zeilen.append(
+            f"{position.menge} * {produkt.bezeichnung} "
+            f"je/für {produkt.nettopreis:.2f} € = {position.netto:.2f} €"
+        )
    
-    print("-" * 50)
-    print(f"Netto: {bestellung.netto_summe:.2f}€")
-    print(f"Rabatt{rabatt_prozent}%: {-bestellung.rabatt_betrag:.2f}€")
-    print(f"MwSt: {bestellung.mwst_betrag:.2f}€")
-    print(f"Brutto: {bestellung.brutto_summe:.2f}€\n")
-    print(f"({bestellung.rabattregel.beschreibung()})")
+    zeilen.append("-" * 50)
+    zeilen.append(f"Netto: {bestellung.netto_summe:.2f}€")
+    zeilen.append(f"Rabatt{rabatt_prozent}%: {-bestellung.rabatt_betrag:.2f}€")
+    zeilen.append(f"MwSt: {bestellung.mwst_betrag:.2f}€")
+    zeilen.append(f"Brutto: {bestellung.brutto_summe:.2f}€\n")
+    zeilen.append(f"({bestellung.rabattregel.beschreibung()})")
 
-def main()-> None:
-    """Hier wird die Demo mit den Produkten, Kunden und Bestellung befüllt"""
-    print("Sortiment (nach Preis):")
+def demo_zeilen()-> list[str]:
+    """Hier wird die Demo mit den Produkten, Kunden und Bestellung ausgegeben"""
+    zeilen=[]
+    zeilen.append("Sortiment gestaffelt (nach Preis): ")
+    
     sortiment=Sortiment.aus_csv(CSV_PFAD)
     produkte =sortiment.alle()
     produkte.sort()
     for p in produkte:
-        print(f"\t{p}")
-    print()
+        zeilen.append(f"\t{p}")
+    zeilen.append("")
 
     """Hier werden die Kunden angelegt und aufgelistet"""
     anna=Privatkunde(1001, "Anna Müller", "anna@example.com", 1995, True)
@@ -55,8 +63,8 @@ def main()-> None:
 
     for kunde in [anna, ben, sv]:
         rabatt_prozent=int(kunde.rabattsatz()*100)
-        print(f"{kunde} - {rabatt_prozent}% Rabatt")
-    print()
+        zeilen.append(f"{kunde} - {rabatt_prozent}% Rabatt")
+    zeilen.append("")
 
     """Hier sind hier noch leer aber zugeordnet"""
     bestellung1=Bestellung(ben)
@@ -73,14 +81,14 @@ def main()-> None:
 
     """Hier wird die Bestellung abgeschlossen und gedruckt"""
     bestellung1.abschliessen()
-    beleg_drucken(bestellung1)
+    beleg_drucken(zeilen, bestellung1)
 
-    print(f"Bestellung {bestellung2.bestellnummer} ({bestellung2.status}) für {bestellung2.kunde.name}: {bestellung2.brutto_summe:.2f}€ brutto")
+    zeilen.append(f"Bestellung {bestellung2.bestellnummer} ({bestellung2.status}) für {bestellung2.kunde.name}: {bestellung2.brutto_summe:.2f}€ brutto")
     
     """Hier wird die abgeschlossene Bestellung bezahlt"""
     rechnung=Rechnung(ben.zahlungsziel_tage)
     rechnungsbeleg=bestellung1.bezahlen(rechnung)
-    print(rechnungsbeleg)
+    zeilen.append(rechnungsbeleg)
 
     """Wir legen 12 mal Wasser in den Einkauskorb"""
     mineralwasser=sortiment.holen("P-1002")
@@ -89,9 +97,9 @@ def main()-> None:
 
     """Alles was im Einkausfkorb liegt wird hier angezeigt"""
     anzahl_produkte=len(warenkorb)
-    anzahl_produkte=warenkorb.stueckzahl
+    anzahl_stueck=warenkorb.stueckzahl
     nettosumme=warenkorb.netto
-    print(f"Warenkorb: {anzahl_produkte} Produkt(e), {anzahl_produkte} Stück, {nettosumme:.2f} € netto")
+    zeilen.append(f"Warenkorb: {anzahl_produkte} Produkt(e), {anzahl_stueck} Stück, {nettosumme:.2f} € netto")
 
     """Hier wird für Anna der Rabattsatz festgelegt"""
     kundenRabatt=KundenRabatt()
@@ -102,17 +110,17 @@ def main()-> None:
     """Jetzt aus allem im Einkaufskorb einen Bestellung bauen"""
     annas_bestellung=warenkorb.bestellen(anna, bester_rabatt)
     annas_bestellung.abschliessen()
-    beleg_drucken(annas_bestellung)
+    beleg_drucken(zeilen, annas_bestellung)
 
     """Wenn Anna mit der Karte zahlen sollte(macht Sie)"""
     kreditkarte=Kreditkarte(anna.name, "4111 1111 1111 4242")
     zahlungsbeleg=annas_bestellung.bezahlen(kreditkarte)
-    print(zahlungsbeleg)
+    zeilen.append(zahlungsbeleg)
 
     try:
         annas_bestellung.hinzufuegen(mineralwasser, 1)
     except BesteloError as fehler:
-        print("Fehler: ",fehler)
+        zeilen.append(f"Fehler: {fehler}")
 
     """Hier laden wir alle 3 möglichen Kunden in eine temporäre Datei"""
     with tempfile.TemporaryDirectory() as ordner:
@@ -127,10 +135,16 @@ def main()-> None:
         """Hier werden die Daten mit Hilfe von einem 2 Repository zurückgelesen"""
         neues_repository=KundenRepository(pfad)
         anzahl=neues_repository.laden()
-        print(f"{anzahl} Kunden wurde gespeichert und geladen")
+        zeilen.append(f"{anzahl} Kunden gespeichert und wieder geladen")
 
         geladener_ben=neues_repository.holen(1002)
-        print(repr(geladener_ben))
+        zeilen.append(repr(geladener_ben))
+    return zeilen
+
+def main()->None:
+    """Gibt alles gesammelt im Terminal aus"""
+    for zeile in demo_zeilen():
+        print(zeile)
 
 """Hier wird gesorgt das main ausgeführt wird. """
 if __name__=="__main__":

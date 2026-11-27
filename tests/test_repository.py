@@ -82,7 +82,7 @@ def test_kaputte_datei(tmp_path:Path)->None:
 
     with pytest.raises(DatenfehlerError) as fehler:
         repository.laden()
-        assert isinstance(fehler.value__cause__,json.JSONDecodeError)
+    assert isinstance(fehler.value.__cause__,json.JSONDecodeError)
 
 def test_sortiment()->None:
     """Hier wird geprüft ob die angelegten Datein aus Phase 1 vorhanden sind (6 sollten es sein)"""
